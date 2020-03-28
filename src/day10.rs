@@ -44,7 +44,7 @@ fn part1() {
 
 fn part2() {
     let init: Box<dyn Iterator<Item = u8>> = Box::from(INPUT.iter().cloned());
-    let ans = (0..70).fold(init, |it, _| lookandsay(it)).count();
+    let ans = (0..50).fold(init, |it, _| lookandsay(it)).count();
     //
     println!("{}", ans);
 }

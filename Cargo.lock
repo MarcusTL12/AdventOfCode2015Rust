@@ -4,6 +4,7 @@
 name = "adventofcode2015"
 version = "0.1.0"
 dependencies = [
+ "divisors",
  "itertools",
  "lazy_static",
  "md5",
@@ -26,6 +27,15 @@ name = "autocfg"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f8aac770f1885fd7e387acedd76065302551364496e46b3dd00860b2f8359b9d"
+
+[[package]]
+name = "divisors"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bbb1463b94567b1d22f0e07d13a70dcc25f39f88ad8cc197ecb978efddb9136e"
+dependencies = [
+ "num",
+]
 
 [[package]]
 name = "either"

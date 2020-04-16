@@ -14,7 +14,7 @@ fn combs<'a>(
     off: usize,
 ) -> Box<dyn Iterator<Item = Vec<usize>> + 'a> {
     if sum == 0 {
-        Box::from(iter::once(vec![]))
+        Box::from(iter::once(Vec::with_capacity(maxlen)))
     } else if len >= maxlen {
         Box::from(iter::empty())
     } else {

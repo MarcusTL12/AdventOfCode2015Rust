@@ -4,6 +4,7 @@
 name = "adventofcode2015"
 version = "0.1.0"
 dependencies = [
+ "arrayvec",
  "divisors",
  "itertools",
  "lazy_static",
@@ -22,6 +23,12 @@ checksum = "8716408b8bc624ed7f65d223ddb9ac2d044c0547b6fa4b0d554f3a9540496ada"
 dependencies = [
  "memchr",
 ]
+
+[[package]]
+name = "arrayvec"
+version = "0.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cff77d8686867eceff3105329d4698d96c2391c176d5d03adc90c7389162b5b8"
 
 [[package]]
 name = "autocfg"

@@ -32,7 +32,7 @@ fn compile_input(filename: &str) -> Vec<Ins> {
         .lines()
         .map(|l| l.unwrap())
         .map(
-            |l| match reg.split(&l).collect::<ArrayVec<[_; 3]>>().as_slice() {
+            |l| match reg.split(&l).collect::<ArrayVec<_, 3>>().as_slice() {
                 ["hlf", x] => Ins::Hlf(register(x)),
                 ["tpl", x] => Ins::Tpl(register(x)),
                 ["inc", x] => Ins::Inc(register(x)),

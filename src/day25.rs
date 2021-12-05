@@ -18,4 +18,6 @@ fn part1() {
     println!("{}", ans);
 }
 
-fn part2() {}
+fn part2() {
+    println!("Merry Codemas!");
+}

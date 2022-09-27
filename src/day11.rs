@@ -1,19 +1,20 @@
-use std::{collections::HashSet, convert::TryInto};
-
-use lazy_static::*;
-
 pub const PARTS: [fn(); 2] = [part1, part2];
 
-lazy_static! {
-    static ref BLACKLIST: HashSet<u8> =
-        "iol".chars().map(|x| x as u8 - b'a').collect();
-    static ref INPUT: [u8; 8] = "hepxcrrq"
-        .chars()
-        .rev()
-        .map(|x| x as u8 - b'a')
-        .collect::<Vec<_>>()[..]
-        .try_into()
-        .unwrap();
+const INPUT: &[u8; 8] = b"hepxcrrq";
+
+fn get_input() -> [u8; 8] {
+    let mut inp = *INPUT;
+    inp.reverse();
+
+    for x in inp.iter_mut() {
+        *x -= b'a';
+    }
+
+    inp
+}
+
+fn blacklist(c: u8) -> bool {
+    matches!(c, 8 | 11 | 14)
 }
 
 fn increment(pass: &mut [u8]) {
@@ -39,7 +40,7 @@ fn isvalid(pass: &[u8]) -> bool {
             }
         });
     //
-    let r2 = pass.iter().any(|x| BLACKLIST.contains(x));
+    let r2 = pass.iter().any(|&x| blacklist(x));
     //
     let r3 = pass
         .iter()
@@ -58,7 +59,7 @@ fn isvalid(pass: &[u8]) -> bool {
 
 fn part1() {
     let ans = (0..)
-        .scan(INPUT.clone(), |buf, _| {
+        .scan(get_input(), |buf, _| {
             increment(buf);
             Some(*buf)
         })
@@ -75,12 +76,12 @@ fn part1() {
 
 fn part2() {
     let ans = (0..)
-        .scan(INPUT.clone(), |buf, _| {
+        .scan(get_input(), |buf, _| {
             increment(buf);
             Some(*buf)
         })
         .filter(|x| isvalid(x))
-        .skip(10000)
+        .skip(1)
         .next()
         .unwrap()
         .iter()

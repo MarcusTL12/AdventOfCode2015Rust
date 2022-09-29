@@ -98,7 +98,7 @@ where
         let mut r1_buf = Mask::splat(false);
 
         for (a, b) in pass_vec.iter().zip(pass_vec.iter().skip(1)) {
-            let rising_mask = (b - a).simd_eq(Simd::splat(1));
+            let rising_mask = (a - b).simd_eq(Simd::splat(1));
             counter = rising_mask.select(counter, Simd::splat(0));
             counter += rising_mask.select(Simd::splat(1i8), Simd::splat(0i8));
             r1_buf |= counter.simd_eq(Simd::splat(3));
@@ -124,15 +124,16 @@ where
         for &v in pass_vec {
             let found = b & last.simd_eq(v);
 
-            last = found.select(v, Simd::splat(0));
+            last = found.select(Simd::splat(0), v);
             b = !found;
-            amt = amt + found.select(Simd::splat(1u8), Simd::splat(0u8));
+            amt += found.select(Simd::splat(1u8), Simd::splat(0u8));
         }
 
-        amt.simd_gt(Simd::splat(2))
+        amt.simd_ge(Simd::splat(2))
     };
 
-    r1 & !r2 & r3
+    r1 & (!r2) & r3
+    // r1
 }
 
 fn part1_naive() -> String {
@@ -157,9 +158,8 @@ fn find_next_chunk_with_valid<const N: usize, const M: usize>(
     LaneCount<N>: SupportedLaneCount,
 {
     increment_vec(pass);
-    while !isvalid_vec(pass).any() {
+    while !(isvalid_vec(pass).any()) {
         increment_vec(pass);
-        break
     }
 }
 
@@ -188,7 +188,7 @@ fn solve_opt<const N_ITER: usize>() -> [u8; 8] {
             .to_array()
             .iter()
             .enumerate()
-            // .filter(|(_, &x)| x)
+            .filter(|(_, &x)| x)
             .next()
             .unwrap()
             .0

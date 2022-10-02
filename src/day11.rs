@@ -3,8 +3,8 @@ use std::{
         LaneCount, Mask, Simd, SimdPartialEq, SimdPartialOrd,
         SupportedLaneCount,
     },
-    time::Instant,
     str,
+    time::Instant,
 };
 
 pub const PARTS: [fn(); 2] = [part1, part2];
@@ -101,7 +101,7 @@ where
             let rising_mask = (a - b).simd_eq(Simd::splat(1));
             counter = rising_mask.select(counter, Simd::splat(0));
             counter += rising_mask.select(Simd::splat(1i8), Simd::splat(0i8));
-            r1_buf |= counter.simd_eq(Simd::splat(3));
+            r1_buf |= counter.simd_eq(Simd::splat(2));
         }
 
         r1_buf
@@ -133,7 +133,6 @@ where
     };
 
     r1 & (!r2) & r3
-    // r1
 }
 
 fn part1_naive() -> String {
@@ -183,7 +182,7 @@ fn solve_opt<const N_ITER: usize>() -> [u8; 8] {
     }
 
     let vmask = isvalid_vec(&pass);
-    let ind = unsafe {
+    let ind = {
         vmask
             .to_array()
             .iter()
@@ -216,8 +215,8 @@ fn part1() {
     println!("Opt:   {ans_opt} took {:?}", t.elapsed());
 }
 
-fn part2() {
-    let ans = (0..)
+fn part2_naive() -> String {
+    (0..)
         .scan(get_input(), |buf, _| {
             increment(buf);
             Some(*buf)
@@ -229,7 +228,16 @@ fn part2() {
         .iter()
         .rev()
         .map(|c| (c + b'a') as char)
-        .collect::<String>();
-    //
-    println!("{}", ans);
+        .collect::<String>()
+}
+
+fn part2() {
+    let t = Instant::now();
+    let ans_naive = part2_naive();
+    println!("Naive: {ans_naive} took {:?}", t.elapsed());
+
+    let t = Instant::now();
+    let ans_opt = solve_opt::<2>();
+    let ans_opt = str::from_utf8(&ans_opt).unwrap();
+    println!("Opt:   {ans_opt} took {:?}", t.elapsed());
 }

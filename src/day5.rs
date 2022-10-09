@@ -1,7 +1,7 @@
 use std::{
     collections::{HashMap, HashSet},
-    fs::File,
-    io::{BufRead, BufReader},
+    fs::{File, self},
+    io::{BufRead, BufReader}, time::Instant,
 };
 
 use itertools::Itertools;
@@ -10,7 +10,7 @@ use lazy_static::*;
 
 pub const PARTS: [fn(); 2] = [part1, part2];
 
-fn isnice(s: &str) -> bool {
+fn isnice_naive(s: &str) -> bool {
     lazy_static! {
         static ref VOWELS: HashSet<char> = "aeiou".chars().collect();
         static ref BLACKLIST: HashSet<(char, char)> =
@@ -25,13 +25,31 @@ fn isnice(s: &str) -> bool {
     r1 && r2 && r3
 }
 
+fn isnice_opt(s: &str) -> bool {
+    let r1 = s
+        .chars()
+        .filter(|c| matches!(c, 'a' | 'e' | 'i' | 'o' | 'u'))
+        .count()
+        >= 3;
+    let r2 = s.chars().tuple_windows().any(|(a, b)| a == b);
+    let r3 = s.chars().tuple_windows().all(|s| {
+        !matches!(s, ('a', 'b') | ('c', 'd') | ('p', 'q') | ('x', 'y'))
+    });
+    r1 && r2 && r3
+}
+
 fn part1() {
-    let ans = BufReader::new(File::open("inputfiles/day5/input.txt").unwrap())
-        .lines()
-        .map(|l| l.unwrap())
-        .filter(|l| isnice(&l))
-        .count();
-    println!("{}", ans);
+    let inp = fs::read_to_string("inputfiles/day5/input.txt").unwrap();
+
+    let t = Instant::now();
+    let ans = inp.split('\n').filter(|l| isnice_naive(&l)).count();
+    let t = t.elapsed();
+    println!("Naive: {ans} took {t:?}");
+
+    let t = Instant::now();
+    let ans = inp.split('\n').filter(|l| isnice_opt(&l)).count();
+    let t = t.elapsed();
+    println!("  Opt: {ans} took {t:?}");
 }
 
 fn isreallynice(s: &str) -> bool {

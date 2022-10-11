@@ -1,4 +1,4 @@
-#![feature(portable_simd)]
+#![feature(portable_simd, slice_as_chunks)]
 
 mod day1;
 mod day10;
@@ -25,6 +25,8 @@ mod day6;
 mod day7;
 mod day8;
 mod day9;
+
+pub mod transpose_u8;
 
 fn main() {
     let funcs = [
